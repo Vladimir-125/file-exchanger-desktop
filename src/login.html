@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Singin</title>
+    <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+	<!-- Insert this line above script imports  -->
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+		<!-- jQuery library -->
+	<script type="text/javascript" src="../assets/vendors/jquery/jquery-3.4.1.js"></script>
+	<script type="text/javascript" src="../assets/vendors/jquery/jquery.form.js"></script>
+	<!-- Bootstrap 4 -->
+	<link rel="stylesheet" href="../assets/vendors/bootstrap-3.4.1/css/bootstrap.min.css">
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
+	<script src="../assets/vendors/bootstrap-3.4.1/js/popper.js"></script>
+	<script src="../assets/vendors/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="../assets/vendors/fontawesome-free-5.11.2-web/css/all.min.css">
+		<!-- Insert this line after script imports -->
+	<script>if (window.module) module = window.module;</script>
+
+</head>
+<body>
+	<div class="container-fluid mt-3">
+		<h3 class="text-center">Login</h3>
+		<form action="#" method="post" id="uploadForm">
+			<div class="form-group">
+			<input type="email" class="form-control" id="email" name="email" autofocus="true" placeholder="Email address">
+			</div>
+			<div class="form-group">
+			<div class="input-group" id="show_hide_password">
+		      <input class="form-control" type="password" name="password" placeholder="Password" id="password" required>
+		      <div class="input-group-prepend">
+		      	<div class="input-group-text">
+		        	<a href="#" onclick="showPass()"><i class="fas fa-eye-slash" aria-hidden="true" id="icon"></i></a>
+		      	</div>
+		      </div>
+		    </div>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block">Login</button>
+		</form>
+		<div class="text-center mt-2">
+			<a href="#">Forgor password?</a><br>
+			<div class="text-secondary">What to join? <a href="/signup">Sign up</a></div>
+		</div>
+      </div>
+	</div>
+			
+
+
+	<!-- <script src="add.js"></script> -->
+	<script>
+		function showPass(){
+			const pass = document.getElementById('password');
+			const icon = document.getElementById('icon');
+			if(pass.getAttribute('type')=='password'){
+				pass.setAttribute('type', 'text');
+				icon.setAttribute('class', 'fas fa-eye');
+			}else{
+				pass.setAttribute('type', 'password');
+				icon.setAttribute('class', 'fas fa-eye-slash');
+
+			}
+		}
+
+	    const request = require("request");
+	    // anable alert and prompts
+		const Dialogs = require('dialogs');
+		const dialogs = Dialogs();
+		const remoteServerName = 'http://localhost:3000';
+		$('#uploadForm').submit(function(e) {
+	   		e.preventDefault(); // prevent multiple submits
+	   		const password = $('#password').val();
+	   		const email = $('#email').val();
+	   		console.log(password);
+	   		console.log(email);
+
+			request({
+			  url: `${remoteServerName}/login`,
+			  method:"POST",
+			  form: {password:password,email:email}
+			},function (err, response, body) {
+			  	if(response.headers.location === "/secure"){
+			  		// logged in successfully
+			  		request({
+					  url: `${remoteServerName}/name`,
+					  method:"POST",
+					},function (err, response, body) {
+					  	console.log(body);
+					  	console.log(response);
+					});
+			  	}else{
+			  		dialogs.alert('Wrong email or password!');
+			  	}
+			})
+		});
+	</script>
+</body>
+</html>

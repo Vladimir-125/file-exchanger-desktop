@@ -1,0 +1,286 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Send Me File</title>
+	
+	<!-- Insert this line above script imports  -->
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+	
+	<!-- jQuery library -->
+	<script type="text/javascript" src="../assets/vendors/jquery/jquery-3.4.1.js"></script>
+	<script type="text/javascript" src="../assets/vendors/jquery/jquery.form.js"></script>
+	<!-- Popper JS -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
+	
+	<!-- Bootstrap 4 -->
+	<link rel="stylesheet" href="../assets/vendors/bootstrap-3.4.1/css/bootstrap.min.css">
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
+	<script src="../assets/vendors/bootstrap-3.4.1/js/popper.js"></script>
+	<script src="../assets/vendors/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+
+		<!-- Insert this line after script imports -->
+	<script>if (window.module) module = window.module;</script>
+	
+<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="row my-3">
+			<div class="col">
+				<div class="border border-secondary pt-3 rounded bg-light px-5 shadow-lg">
+					<div class="text-center">
+						<form action="#" enctype="multipart/form-data" method="POST"  id='uploadForm'>
+						<div class="custom-file mb-3">
+						    <input type="file" class="custom-file-input" id="file" required>
+						    <label class="custom-file-label" for="file">Choose file...</label>
+						</div>
+						<div class="d-flex justify-content-between">
+							<div>
+								<input type="password" name="password" id="password" class="btn-lg" placeholder="Password" required />
+							</div>
+							<div>
+								<input type="submit" class="btn btn-primary btn-lg" value="Send"/>
+							</div>
+						</div>
+						</form>	
+					</div>
+					<!-- Progress bar -->
+					<div id="uploaded" class="my-3">
+		
+					</div>
+				</div>
+			</div>
+		</div>			
+		<div class="row">
+			<div class="col">
+				<div class="border border-secondary pt-3 rounded bg-light px-5 shadow-lg">
+					<div class="text-center">
+						<form action="/download"  method="POST" id='download'> 
+							<div class="custom-file mb-3">
+			   					<input type="text" name="fileId" class="form-control" placeholder="Enter Key" id="keyNum">
+			   				</div>
+			    			<input type="submit" class="btn btn-primary btn-lg" value="Receive"/>
+			    		</form>
+		    		</div>
+		    	</div>
+
+			</div>
+		
+		</div>
+	</div>
+	<style>
+	body{
+		background-color: #86b1d878;
+	}
+	</style>
+	<script>
+		const request = require("request");
+	    const fs = require('fs');
+		const path = require('path');
+		// anable alert and prompts
+		const Dialogs = require('dialogs');
+		const dialogs = Dialogs();
+		const remoteServerName = 'http://localhost:3000';
+		// $( document ).ready(function() {
+		// 	console.log('Page loaded!');
+		//     $.ajax({
+		// 		url: '/name',
+		// 		type: 'POST'
+		// 	})
+		// 	.done(function(res) {
+		// 		console.log(res);
+		// 		$('#user_name').html('Welcome, '+res+'!');
+		// 	});
+		// });
+
+		// Add the name of the file appear on select
+		$(".custom-file-input").on("change", function() {
+			var fileName = $(this).val().split("\\").pop();
+			$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+		});
+		// delete form value after file is sent
+		$('#uploadForm').submit(function(e) {
+	   		e.preventDefault(); // prevent multiple submits
+	   		if($('#file').val()==''){
+	   			alert('File is not selected!\nSelect a file and try again.');
+	   		}else{
+
+	   			// TODO: add asinc file upload here
+	   			var form = $(this);
+				
+				addProgressBar();
+
+				var progress = $('.progress-bar');
+
+				var percentVal = '0%';
+		        progress.css('width' , percentVal);
+		        progress.html(percentVal);
+
+			    var fpath = document.getElementById("file").files[0].path;
+			    var fname = fpath.substr(fpath.lastIndexOf('\\')+1);
+
+			    let size = fs.lstatSync(fpath).size;
+				let bytes = 0;
+				
+				let password = $('#password').val();
+
+				let r = request({
+				  url: `${remoteServerName}/uploadfile`,
+				  method:"POST",
+				  formData: {
+				    file: fs.createReadStream(fpath).on('data', (chunk) => {
+				    	bytes += chunk.length;
+					    var percentVal = Math.floor((bytes/size)*100) + '%';
+				        progress.css('width' , percentVal);
+				        progress.html(percentVal);
+					  }),
+				    password:password
+				  }
+				},function (err, response, body) {
+				  	let res = JSON.parse(body);
+				  	var percentVal = '100%';
+			        progress.css('width', percentVal);
+			        progress.html(percentVal);
+			        
+			        setTimeout(()=>{
+	                	$('.progress').remove();
+	    				//$( "#uploaded" ).append(name);
+						addUpload(res.key, res.time, fname)
+	                	//alert(response);
+			        }, 500);
+				})
+			 //    var fname = $('#file').val();
+			 //    fname = fname.substr(fname.lastIndexOf('\\')+1);
+				// form.ajaxSubmit({
+				// 	beforeSend: function() {
+				//         //status.empty();
+				//         var percentVal = '0%';
+				//         progress.css('width' , percentVal);
+				//         progress.html(percentVal);
+				//     },
+
+				//     uploadProgress: function(event, position, total, percentComplete) {
+				//         var percentVal = percentComplete + '%';
+				//         progress.css('width' , percentVal);
+				//         progress.html(percentVal);
+				//     },
+
+			 //   		error: function(xhr) {
+			 //        	status('Error: ' + xhr.status);
+			 //        },
+
+		  //           success: function(response) {
+		  //           	var percentVal = '100%';
+				//         progress.css('width', percentVal);
+				//         progress.html(percentVal);
+				//         setTimeout(()=>{
+		  //               	$('.progress').remove();
+		  //   				//$( "#uploaded" ).append(name);
+				// 			addUpload(response.key, response.time, fname)
+		  //               	//alert(response);
+				//         }, 500);
+		  //           }
+			 //    });
+	    		$('#file').val(''); // clear input file
+	    		// remove file name from input
+	    		$('.custom-file-label').removeClass('selected').html('Choose file');
+	    		$('#password').val(''); // clear input password
+	   		}
+	   		return false;
+		});
+
+
+		$('#download').submit(function(e) {
+			e.preventDefault(); // don't submit multiple times
+
+			const key = $('#keyNum').val();
+
+			request({
+			url: `${remoteServerName}/validate`,
+			method:"POST",
+			form: {key:key}
+			},function (err, response, body) {
+				// body has response string
+				if(body=='ok'){
+					util.post(remoteServerName+'/download', {key:key});
+				}
+				else if (body=='enc'){
+					let pass;
+					dialogs.prompt('Enter password:', pass => {
+						//const pass = prompt('Enter passowrd:');
+						request({
+							url: remoteServerName+'/validate',
+							method: 'POST',
+							form:{key:key, password:pass}
+						}, function(err, res, body){
+							if(body=='ok'){
+								dialogs.alert('Entered here!');
+								util.post(remoteServerName+'/download', {key:key, password:pass});
+							}else{
+								//alert('Wrong password!');
+								dialogs.alert('Wrong password!');
+							}
+						});
+					});
+
+				
+				}else{
+					// received isnx message
+					dialogs.alert('Does not exist!');
+				}		
+			});
+			$('#keyNum').val('')	
+				return false;
+		});
+
+
+		function addProgressBar(){
+			const uploaded = $('#uploaded')
+			const progress = $('<div></div>').addClass('progress')
+			progress.append($('<div>0%</div>').addClass('progress-bar').css('width','0%'));
+			uploaded.append(progress);
+		}
+	</script>
+	<script>
+
+	function addUpload(key, time, filename){
+			const timerId = randHex(12);
+			const qrCodeId = randHex(12);
+			var file = `
+						<div class="card mb-2">
+						  	<div class="card-body p-2">
+						  		<div class="container">
+						  			<div class="row">
+						  				<div class="col-sm-9">
+						  					<h5 class="card-title mb-0">Download Key: ${key}</h5>
+							    			<p class="card-text">${filename}<br>Expire time: <span id="${timerId}">${time}</span></p>
+						  				</div>
+						  				<div class="col-sm-3" id="${qrCodeId}">
+						  				</div>
+						  			</div>
+						  			
+						  		</div>
+						  	</div>
+						</div>
+						`
+			
+			$('#uploaded').append($(file));
+			var qrcode = new QRCode(document.getElementById(qrCodeId), {
+				width : 80,
+				height : 80
+			});
+			qrcode.makeCode(window.location.origin+'/download?key='+key);
+
+			countTime(time, timerId);
+
+		}
+	</script>
+	<!-- custom script -->
+	<link rel="stylesheet" type="text/css" href="../assets/css/style.css"/>
+	<script type="text/javascript" src="../assets/js/script.js"></script>
+
+	<!-- qrcode generator -->
+	<script type="text/javascript" src="../assets/js/qrcode.min.js"></script>
+</body>
+</html>
