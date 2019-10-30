@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Send Me File</title>
+	<title>File Exchanger</title>
 	
 	<!-- Insert this line above script imports  -->
 	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
@@ -20,8 +20,6 @@
 
 		<!-- Insert this line after script imports -->
 	<script>if (window.module) module = window.module;</script>
-	
-<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
 
 </head>
 <body id="holder">
@@ -65,29 +63,7 @@
 		
 		</div>
 	</div>
-<script>
-//	$('#file-select-button').click(function(){
- //  		$("#file ").trigger('click');
-//	})
-
-//	$("#file").change(function(){
-//	   $('#val').text(this.value.replace(/C:\\fakepath\\/i, ''))
-//	})  
-</script>
 <style>
-
-/*#file{
-  	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;   
-}
-#file-select-button{
-	cursor: pointer; /* "hand" cursor 
-}*/
-
 body{
 	background-color: #86b1d878;
 }
@@ -154,40 +130,7 @@ body{
 	                	//alert(response);
 			        }, 500);
 				})
-				// setInterval(()=>{
-				// 	console.log(`Uploaded: ${r.req.connection._bytesDispatched}`)
-				// },250);
-
-				// form.ajaxSubmit({
-				// 	beforeSend: function() {
-				//         //status.empty();
-				//         var percentVal = '0%';
-				//         progress.css('width' , percentVal);
-				//         progress.html(percentVal);
-				//     },
-
-				//     uploadProgress: function(event, position, total, percentComplete) {
-				//         var percentVal = percentComplete + '%';
-				//         progress.css('width' , percentVal);
-				//         progress.html(percentVal);
-				//     },
-
-			 //   		error: function(xhr) {
-			 //        	status('Error: ' + xhr.status);
-			 //        },
-
-		  //           success: function(response) {
-		  //           	var percentVal = '100%';
-				//         progress.css('width', percentVal);
-				//         progress.html(percentVal);
-				//         setTimeout(()=>{
-		  //               	$('.progress').remove();
-		  //   				//$( "#uploaded" ).append(name);
-				// 			addUpload(response.key, response.time, fname)
-		  //               	//alert(response);
-				//         }, 500);
-		  //           }
-			 //    });
+	
 	    		$('#file').val(''); // clear input form
 	    		// remove file name from input
 	    		$('.custom-file-label').removeClass('selected').html('Choose file');
@@ -275,37 +218,6 @@ body{
 					dialogs.alert('Does not exist!');
 				}		
 			});
-
-			// $.ajax({
-			// 	url: '/validate',
-			// 	type: 'POST',
-			// 	data:{key:key}
-			// })
-			// .done(function(res) {
-			// 	console.log(res);
-			// 	if(res=='ok'){
-			// 		util.post('/download', {key:key});
-			// 	}
-			// 	else if (res=='enc'){
-			// 		const pass = prompt('Enter passowrd:');
-			// 		$.ajax({
-			// 			url: '/validate',
-			// 			type: 'POST',
-			// 			data:{key:key, password:pass}
-			// 		}).done(function(res) {
-			// 			if(res=='ok'){
-			// 				util.post('/download', {key:key, password:pass});
-			// 			}else{
-			// 				alert('Wrong password!');
-			// 			}
-			// 		});
-			// 	}else{
-			// 		// received isnx message
-			// 		alert('Does not exist!');
-			// 	}
-
-			// });
-			
 
 			$('#keyNum').val('')	
 				return false;

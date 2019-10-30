@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Send Me File</title>
+	<title>File exchanger</title>
 	
 	<!-- Insert this line above script imports  -->
 	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
@@ -21,8 +21,6 @@
 		<!-- Insert this line after script imports -->
 	<script>if (window.module) module = window.module;</script>
 	
-<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
-
 </head>
 <body>
 	<div class="container">
@@ -82,17 +80,6 @@
 		const Dialogs = require('dialogs');
 		const dialogs = Dialogs();
 		const remoteServerName = 'http://localhost:3000';
-		// $( document ).ready(function() {
-		// 	console.log('Page loaded!');
-		//     $.ajax({
-		// 		url: '/name',
-		// 		type: 'POST'
-		// 	})
-		// 	.done(function(res) {
-		// 		console.log(res);
-		// 		$('#user_name').html('Welcome, '+res+'!');
-		// 	});
-		// });
 
 		// Add the name of the file appear on select
 		$(".custom-file-input").on("change", function() {
@@ -149,39 +136,8 @@
 						addUpload(res.key, res.time, fname)
 	                	//alert(response);
 			        }, 500);
-				})
-			 //    var fname = $('#file').val();
-			 //    fname = fname.substr(fname.lastIndexOf('\\')+1);
-				// form.ajaxSubmit({
-				// 	beforeSend: function() {
-				//         //status.empty();
-				//         var percentVal = '0%';
-				//         progress.css('width' , percentVal);
-				//         progress.html(percentVal);
-				//     },
-
-				//     uploadProgress: function(event, position, total, percentComplete) {
-				//         var percentVal = percentComplete + '%';
-				//         progress.css('width' , percentVal);
-				//         progress.html(percentVal);
-				//     },
-
-			 //   		error: function(xhr) {
-			 //        	status('Error: ' + xhr.status);
-			 //        },
-
-		  //           success: function(response) {
-		  //           	var percentVal = '100%';
-				//         progress.css('width', percentVal);
-				//         progress.html(percentVal);
-				//         setTimeout(()=>{
-		  //               	$('.progress').remove();
-		  //   				//$( "#uploaded" ).append(name);
-				// 			addUpload(response.key, response.time, fname)
-		  //               	//alert(response);
-				//         }, 500);
-		  //           }
-			 //    });
+				});
+		
 	    		$('#file').val(''); // clear input file
 	    		// remove file name from input
 	    		$('.custom-file-label').removeClass('selected').html('Choose file');
@@ -215,7 +171,6 @@
 							form:{key:key, password:pass}
 						}, function(err, res, body){
 							if(body=='ok'){
-								dialogs.alert('Entered here!');
 								util.post(remoteServerName+'/download', {key:key, password:pass});
 							}else{
 								//alert('Wrong password!');

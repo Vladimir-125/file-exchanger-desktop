@@ -23,7 +23,7 @@ function createWindow () {
   win.loadFile('./src/index.html')
 
   // Open the DevTools.
-  win.webContents.openDevTools()
+  //win.webContents.openDevTools()
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -45,36 +45,36 @@ function createWindow () {
           win.reload();
         }
       },
+      // {
+      //   label:'Login',
+      //   click(){
+      //     // open login page
+      //     const modalPath = path.join('file://', __dirname, 'src/login.html');
+      //     let loginWin = new BrowserWindow({width:400, height:400, alwaysOnTop:true, webPreferences: {
+      //       nodeIntegration: true
+      //     }});
+      //     // open the file
+      //     loginWin.loadURL(modalPath);
+      //     //win.webContents.openDevTools();
+
+      //     // null win pointer after window is closed  
+      //     loginWin.on('close', function(){loginWin=null});
+      //     loginWin.removeMenu();
+      //     loginWin.webContents.openDevTools()
+
+      //     // show loaded file
+      //     loginWin.show();
+
+      //   }
+      // },
       {
-        label:'Login',
-        click(){
-          // open login page
-          const modalPath = path.join('file://', __dirname, 'src/login.html');
-          let loginWin = new BrowserWindow({width:400, height:400, alwaysOnTop:true, webPreferences: {
-            nodeIntegration: true
-          }});
-          // open the file
-          loginWin.loadURL(modalPath);
-          //win.webContents.openDevTools();
-
-          // null win pointer after window is closed  
-          loginWin.on('close', function(){loginWin=null});
-          loginWin.removeMenu();
-          loginWin.webContents.openDevTools()
-
-          // show loaded file
-          loginWin.show();
-
-        }
-      },
-      {
-        label:'simple upload',
+        label:'Simple upload',
         click(){
            win.loadFile('./src/index.html');
         }
       },
       {
-        label:'secure send',
+        label:'Secure upload',
         click(){
           // open login page
           // const modalPath = path.join('file://', __dirname, 'src/secure.html');
@@ -112,10 +112,16 @@ function createWindow () {
     label:'Info',
     submenu:[
     {
-      label:'System architecture'
+      label:'Project page',
+      click(){ // make the app closeable
+        shell.openExternal('https://github.com/Vladimir-125/file-exchanger');
+      }
     },
     {
-      label:'About'
+      label:'About Me',
+      click(){ // make the app closeable
+        shell.openExternal('https://vladimir-125.github.io/resume/');
+      }
     }
     ]
   }
