@@ -9,10 +9,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 
 ```
-1.	NPM v6.12.0^ should be preinstalled
-2.	Node v9.5.0^ should be preinstalled
-3.	MySQL v5.5.53^ should be preinstalled
-4.	Install file-exchanger project first
+1.  NPM v6.12.0^ should be preinstalled
+2.  Node v9.5.0^ should be preinstalled
+3.  MySQL v5.5.53^ should be preinstalled
+4.  Install file-exchanger project first
 ```
 
 ### Installing
